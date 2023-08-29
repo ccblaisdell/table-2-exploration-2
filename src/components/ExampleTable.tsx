@@ -1,62 +1,55 @@
-import { createOpportunity, times } from "../utils";
+import { Opportunity, createOpportunity, times } from "../utils";
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 
 const data = times(100, createOpportunity);
 
+const columnHelper = createColumnHelper<Opportunity>();
+
 const columns = [
-  {
-    accessorKey: "name",
-    header: "Name",
-    cell: (row) => row.name,
-    size: 150,
-  },
-  {
-    accessorKey: "accountId",
-    header: "Account ID",
-    cell: (row) => row.accountId,
-    size: 150,
-  },
-  {
-    accessorKey: "amount",
-    header: "Amount",
-    cell: (row) => `${row.amountCurrencyCode} ${row.amount}`,
-    size: 150,
-  },
-  {
-    accessorKey: "aRR",
-    header: "ARR",
-    cell: (row) => row.aRR,
-    size: 150,
-  },
-  {
-    accessorKey: "closeDate",
-    header: "Close Date",
-    cell: (row) => row.closeDate.toLocaleString(),
-    size: 150,
-  },
+  columnHelper.accessor("name", {}),
+  columnHelper.accessor("accountId", {}),
+  columnHelper.accessor("amount", {}),
+  columnHelper.accessor("aRR", {}),
 ];
 
 export const ExampleTable = () => {
+  const table = useReactTable({
+    columns,
+    data,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
   return (
     <table className="border-2 text-left text-sm">
       <thead>
-        <tr>
-          {columns.map((column) => (
-            <th
-              key={column.accessorKey}
-              className="border-l-2 p-2"
-              style={{ width: column.size }}
-            >
-              {column.header}
-            </th>
-          ))}
-        </tr>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <tr key={headerGroup.id}>
+            {headerGroup.headers.map((header) => (
+              <th
+                key={header.id}
+                className="border-l-2 p-2"
+                style={{ width: header.getSize() }}
+              >
+                {flexRender(
+                  header.column.columnDef.header,
+                  header.getContext()
+                )}
+              </th>
+            ))}
+          </tr>
+        ))}
       </thead>
       <tbody>
-        {data.map((row) => (
+        {table.getRowModel().rows.map((row) => (
           <tr key={row.id} className="border-y-2">
-            {columns.map((column) => (
-              <td key={column.accessorKey} className="border-l-2 px-2 py-1">
-                {column.cell(row)}
+            {row.getVisibleCells().map((cell) => (
+              <td key={cell.id} className="border-l-2 px-2 py-1">
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>
             ))}
           </tr>
