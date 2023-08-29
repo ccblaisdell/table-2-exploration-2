@@ -31,7 +31,7 @@ export const createOpportunity = () => ({
   type: faker.commerce.productMaterial(),
   name: faker.company.name(),
   ...Object.fromEntries(
-    alphabet.map((char) => [char, faker.random.alphaNumeric(8)])
+    alphabet.map((char) => [char, faker.string.alphanumeric(8)])
   ),
 });
 

@@ -1,11 +1,8 @@
 import "./App.css";
+import { ExampleTable } from "./components";
 
 function App() {
-  return (
-    <>
-      <div>Table here</div>
-    </>
-  );
+  return <ExampleTable />;
 }
 
 export default App;
