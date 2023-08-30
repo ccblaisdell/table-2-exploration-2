@@ -54,10 +54,6 @@ const reduceFeature = (
   item: any
 ) => {
   return features.reduce((item, feature) => {
-    if (!(hook in feature)) {
-      return item;
-    }
-
     return feature[hook]?.(item) ?? item;
   }, item);
 };
